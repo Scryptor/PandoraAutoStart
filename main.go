@@ -19,7 +19,7 @@ func main() {
 	mux.HandleFunc("/start", HandleVehicleStarter)
 	mux.HandleFunc("/stop", HandleVehicleStopper)
 	// так же можно сделать команду стоп двигатель, проверку баланса и т.п., но моя задача была просто запустить через Алису, поэтому если кому надо, то сам или ко мне за прайс
-	fmt.Println("Сервер запущен по адресу http://127.0.0.1:4443, для запуска машины https://127.0.0.1:4443/start")
+	fmt.Println("Сервер запущен по адресу http://127.0.0.1:4443, для запуска машины http://127.0.0.1:4443/start")
 	log.Fatal("Сервер упал: ", http.ListenAndServe(":4443", mux))
 }
 
