@@ -12,10 +12,13 @@ import (
 // Изменить на свои
 const login = "1079312388"
 const pass = "n8V8xqbF"
+
+// Token нужен для безопасности, его меняем на любой,так же при старте/стопе вызываем с новым токеном
 const Token = "af0deccbgcgidddjgnvljitntccddui3jhdinfgjgfjEr"
 
 func main() {
 	// Почему я не храню объект пандоры? Я не знаю, сколько у них может длиться сессия, проще каждый раз переконнект делать, тогда точно будет работать.
+	//GOOS=linux GOARCH=amd64 go build - компилить под линукс
 	mux := http.NewServeMux()
 	mux.HandleFunc("/start", HandleVehicleStarter)
 	mux.HandleFunc("/stop", HandleVehicleStopper)
@@ -25,7 +28,7 @@ func main() {
 }
 
 func HandleVehicleStarter(w http.ResponseWriter, r *http.Request) {
-	if GetQuery(r) {
+	if CheckToken(r) {
 		go PandoraStarter()
 		w.Header().Set("Content-Type", "application/json")
 		warn, _ := json.Marshal("Отправлена команда на запуск")
@@ -36,7 +39,7 @@ func HandleVehicleStarter(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleVehicleStopper(w http.ResponseWriter, r *http.Request) {
-	if GetQuery(r) {
+	if CheckToken(r) {
 		go PandoraStopper()
 		w.Header().Set("Content-Type", "application/json")
 		warn, _ := json.Marshal("Отправлена команда на остновку")
@@ -70,7 +73,8 @@ func PandoraStopper() {
 	Pandora.Cansel()
 }
 
-func GetQuery(r *http.Request) bool {
+// CheckToken Проверяет токен, если корректный возвращает true
+func CheckToken(r *http.Request) bool {
 	if len(r.URL.Query()) > 0 {
 		if tVal, ok := r.URL.Query()["token"]; ok {
 			token := tVal[0]

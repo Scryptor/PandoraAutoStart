@@ -47,8 +47,8 @@ func Handler(ctx context.Context) (*Response, error) {
 func SendTG() error {
 	ClientH := http.Client{Timeout: 10 * time.Second}
 	data := url.Values{}
-
-	req, err := http.NewRequest("GET", "http://ссылка на ваш url", strings.NewReader(data.Encode()))
+	// В ссылке поменять ip и токен
+	req, err := http.NewRequest("GET", "http://10.31.12.36:4443/stop?token=af0deccbgcgidddjgnvljitntccddui3jhdinfgjgfjEr", strings.NewReader(data.Encode()))
 	if err != nil {
 		return err
 	}
